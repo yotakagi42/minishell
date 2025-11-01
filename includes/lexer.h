@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhara <nhara@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yotakagi <yotakagi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:12:44 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/06/09 16:49:54 by nhara            ###   ########.fr       */
+/*   Updated: 2025/11/01 16:43:19 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ int		is_operator_start(char c);
 int		is_word_char(char c);
 void	skip_spaces(const char **input);
 char	*ft_strndup(const char *s, size_t n);
+int		read_one_char_op(const char **input, t_lexer **tokens);
+int		read_two_char_op(const char **input, t_lexer **tokens);
 
 #endif // !LEXER_H
