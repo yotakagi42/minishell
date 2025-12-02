@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 08:48:31 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/01 07:51:40 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:18:00 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,11 @@ int	ft_fork(t_shell *shell, int pipe_fd[2], int input_fd, t_cmd *cmd)
 	if (shell->pid[i] < 0)
 		ft_error(5, shell); // TODO forkが失敗した場合のエラー文
 	if (shell->pid[i] == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		dup_cmd(cmd, shell, pipe_fd, input_fd);
+	}
 	i++;
 	return (EXIT_SUCCESS);
 }
@@ -73,6 +77,7 @@ int	wait_all_children(int *pid, int cmd_count)
 	int	status;
 	int	last_status_code;
 	int	last_pid;
+	int	printed_nl = 0;
 
 	last_status_code = 0;
 	last_pid = pid[cmd_count -1];
@@ -82,6 +87,16 @@ int	wait_all_children(int *pid, int cmd_count)
 		//&statusを渡すと、waitpidがそのアドレスに終了情報を書き込む
 		// 0：指定したプロセスが終わるまで待つ
 		waitpid(pid[i], &status, 0);
+		if (WTERMSIG(status) == SIGINT && !printed_nl)
+        {
+			write(1, "\n", 1);
+            printed_nl = 1; // 一回だしたらもう出さない
+        }
+		else if (WTERMSIG(status) == SIGQUIT && !printed_nl)
+        {
+			ft_putstr_fd("Quit: (core dumped)\n", 2);
+            printed_nl = 1;
+        }
 		if(pid[i] == last_pid)
 		{
 			if (WIFEXITED(status))
@@ -128,8 +143,10 @@ int		multiple_cmds(t_shell *shell)
 		else
 			break ;
 	}
+	signal(SIGINT, SIG_IGN);
 	// 子プロセスを全て待つ
 	shell->error_num = wait_all_children(shell->pid, shell->pipes + 1);
+	init_signals();
 	shell->cmd = get_cmdlist_first(shell->cmd);
 	return (0);
 }

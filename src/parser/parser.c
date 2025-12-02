@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nagisa <nagisa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 19:01:20 by nagisa            #+#    #+#             */
-/*   Updated: 2025/06/17 12:24:44 by nagisa           ###   ########.fr       */
+/*   Updated: 2025/12/02 12:11:53 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,16 @@ int parser(t_shell *shell) // TODO
 		parser_shell = init_parser_shell(shell->lexer_list, shell);
 		// 新しいコマンドを構築
 		node = init_cmd(&parser_shell);
-		if (!node) // TODO　これは何のエラー？
+		if (!node)
+		{
+			if(g_signal)
+			{
+				//free_lexer?
+				shell->error_num = 1;
+				return (EXIT_FAILURE);
+			}
 			parser_error(0, shell, parser_shell.lexer_list);
+		}
 		// 構築したコマンドを、コマンドリストに追加
 		// コマンドリストが空の場合、先頭に入れる
 		if (!shell->cmd)

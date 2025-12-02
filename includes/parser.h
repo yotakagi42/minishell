@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 18:56:10 by nagisa            #+#    #+#             */
-/*   Updated: 2025/11/22 10:26:13 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:04:55 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void init_shell(t_shell *shell);
 int loop(t_shell *shell);
 
 // redirections
-void remove_redirections(t_parser_shell *parser_shell);
+int remove_redirections(t_parser_shell *parser_shell);
 
 // quotes
 int validate_quotes(char *args);

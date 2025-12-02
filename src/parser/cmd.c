@@ -111,7 +111,8 @@ t_cmd	*init_cmd(t_parser_shell *parser_shell)
 	char **str; // ここに格納する
 	i = 0;
 	// リダイレクトを取り除きredirectionsリストに格納
-	remove_redirections(parser_shell);
+	if (remove_redirections(parser_shell) == EXIT_FAILURE)
+		return (NULL);
 	// 1つのコマンドブロックの引数の数を数える
 	arg_size = count_args(parser_shell->lexer_list);
 	// 二次元配列の作成

@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:14:16 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/02 04:21:04 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:18:25 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,11 @@ void	single_cmd(t_cmd *cmd, t_shell *shell)
 	if (WIFEXITED(status))
 		shell->error_num = WEXITSTATUS(status);
 	else if(WIFSIGNALED(status))
+	{
 		shell->error_num = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
+		else if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Qiit: (core dumped)\n", 2);
+	}
 }
