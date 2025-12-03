@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:43:06 by nhara             #+#    #+#             */
-/*   Updated: 2025/12/03 12:28:06 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:23:06 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ void	init_shell(t_shell *shell)
 	if (init_paths_from_env(shell) == EXIT_FAILURE)
 	{
 		printf("msg"); //エラーメッセージどうする？
-	if(init_paths_from_env(shell) == EXIT_FAILURE)
-		exit(EXIT_FAILURE);
-	init_signals();
+		if (init_paths_from_env(shell) == EXIT_FAILURE)
+			exit(EXIT_FAILURE);
+		init_signals();
+	}
 }
-
 // シェル全体のデータ解放＋最初期化＋次のループへ
 int	reset_shell(t_shell *shell)
 {
@@ -82,7 +82,6 @@ int	loop(t_shell *shell)
 	tmp = ft_strtrim(shell->args, " \t"); //タブ文字も除去する変更
 	free(shell->args);
 	shell->args = tmp;
-
 	if (g_signal)
 	{
 		shell->error_num = 130;
@@ -92,17 +91,14 @@ int	loop(t_shell *shell)
 			return (shell->error_num);
 		}
 	}
-	
 	if (!shell->args)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-
-	tmp = ft_strtrim(shell->args, " \t");//タブ文字も除去する変更
+	tmp = ft_strtrim(shell->args, " \t"); //タブ文字も除去する変更
 	free(shell->args);
 	shell->args = tmp;
-
 	if (shell->args[0] == '\0')
 		return (shell->error_num);
 	add_history(shell->args);
