@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:43:06 by nhara             #+#    #+#             */
-/*   Updated: 2025/12/03 14:32:46 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/03 15:10:58 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,8 @@ void	init_shell(t_shell *shell)
 	shell->heredoc = false;
 	shell->error_num = 0;
 	if (init_paths_from_env(shell) == EXIT_FAILURE)
-	{
-		printf("msg"); //エラーメッセージどうする？
-		if (init_paths_from_env(shell) == EXIT_FAILURE)
-			exit(EXIT_FAILURE);
-		init_signals();
-	}
+		exit(EXIT_FAILURE);
+	init_signals();
 }
 // シェル全体のデータ解放＋最初期化＋次のループへ
 int	reset_shell(t_shell *shell)
@@ -79,10 +75,6 @@ int	loop(t_shell *shell)
 	{
 		shell->error_num = 130;
 		g_signal = 0;
-		if (!shell->args)
-		{
-			return (shell->error_num);
-		}
 	}
 	if (!shell->args)
 	{
