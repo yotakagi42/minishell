@@ -6,11 +6,18 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:20:47 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/02 12:44:50 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:16:56 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	heredoc_sigint_handler(int sig)
+{
+	(void)sig;
+	g_signal = 1;
+	write(1, "\n", 1);
+}
 
 static int get_var_len(char *str)
 {
@@ -134,6 +141,7 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 		return (-1);
 	}
 
+	signal(SIGINT, heredoc_sigint_handler);
 	rl_event_hook = heredoc_signal_check;
 
 	while (1)
@@ -154,7 +162,7 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 		if (!line)
 		{
 			//ToDo メッセージの修正
-			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file", 2);
+			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", 2);
 			break ;
 		}
 		if (ft_strcmp(line, delimiter) == 0)
@@ -173,6 +181,7 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 		free(line);
 	}
 	rl_event_hook = NULL;
+	init_signals();
 	close(pipe_fd[1]);
 	return (pipe_fd[0]);
 }

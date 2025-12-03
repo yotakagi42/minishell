@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 19:01:20 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/02 12:11:53 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:33:16 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int parser(t_shell *shell) // TODO
 	count_pipes(shell->lexer_list, shell);
 	// エラー：最初にパイプ
 	if (shell->lexer_list->token == PIPE)
-		return (parser_double_token_error(shell, shell->lexer_list,
-										  shell->lexer_list->token));
+		return (parser_double_token_error(shell->lexer_list, shell->lexer_list->token));
 	// lexerの最後まで繰り返す
 	while (shell->lexer_list && shell->lexer_list->token != END_OF_INPUT)
 	{
@@ -46,7 +45,7 @@ int parser(t_shell *shell) // TODO
 				shell->error_num = 1;
 				return (EXIT_FAILURE);
 			}
-			parser_error(0, shell, parser_shell.lexer_list);
+			parser_error(0, parser_shell.lexer_list);
 		}
 		// 構築したコマンドを、コマンドリストに追加
 		// コマンドリストが空の場合、先頭に入れる

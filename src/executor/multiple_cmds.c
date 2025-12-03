@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 08:48:31 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/02 11:18:00 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:29:38 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_fork(t_shell *shell, int pipe_fd[2], int input_fd, t_cmd *cmd)
 	// fork失敗：親プロセスに-1が返り、子プロセスは生成されない
 	// fork成功：親プロセスに子のPIDが返る。子プロセスに0が返る
 	if (shell->pid[i] < 0)
-		ft_error(5, shell); // TODO forkが失敗した場合のエラー文
+		ft_error(5); // TODO forkが失敗した場合のエラー文
 	if (shell->pid[i] == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -57,12 +57,12 @@ void	dup_cmd(t_cmd *cmd, t_shell *shell, int pipe_fd[2], int input_fd)
 	// 標準入力（STDIN_FILENO）の読み取り先を、input_fd(前のコマンドの出力)にすり替える
 	// dup2が失敗すると-1が返る
 	if (cmd->prev && dup2(input_fd, STDIN_FILENO) < 0)
-		ft_error(4, shell); // TODO
+		ft_error(4); // TODO
 	// 現コマンドの読み取りはもう使わないので閉じる
 	close(pipe_fd[0]);
 	// 次のコマンドがあるなら、今のコマンドの標準出力を end[1]（パイプの書き込み口）に変更
 	if (cmd->next && dup2(pipe_fd[1], STDOUT_FILENO) < 0)
-		ft_error(4, shell); // TODO
+		ft_error(4); // TODO
 	close(pipe_fd[1]);
 	// dup2(input_fd, STDIN_FILENO)でinput_fdの内容はSTDIN_FILENOに複製済みだから不要
 	// 前にコマンドがない場合は、そもそもinput_fdを使っていない

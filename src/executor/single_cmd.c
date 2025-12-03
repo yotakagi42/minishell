@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:14:16 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/02 11:18:25 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:29:44 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	single_cmd(t_cmd *cmd, t_shell *shell)
 	}
 	pid = fork();
 	if (pid < 0)
-		ft_error(3, shell);
+		ft_error(3);
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);

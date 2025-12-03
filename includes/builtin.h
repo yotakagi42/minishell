@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:14:42 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/02 16:34:57 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/02 13:12:44 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,4 @@ void	update_or_add_env(t_shell *shell, char *key, char *val);
 int		find_env_entry(char **env, char *key);
 char	*my_getenv(char **env, char *key);
 
-#endif /
+#endif

@@ -118,7 +118,7 @@ t_cmd	*init_cmd(t_parser_shell *parser_shell)
 	// 二次元配列の作成
 	str = ft_calloc(arg_size + 1, sizeof(char *));
 	if (!str)
-		parser_error(1, parser_shell->shell, parser_shell->lexer_list);
+		parser_error(1, parser_shell->lexer_list);
 	tmp = parser_shell->lexer_list;
 	while (0 < arg_size)
 	{

@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 08:59:59 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/02 12:07:49 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:33:28 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,18 @@ int	extract_redirection(t_lexer *tmp, t_parser_shell *parser_shell)
 	//レダイレクト先のファイル名、tokenはレダイレクト記号を引き継ぐ
 	node = create_node(ft_strdup(tmp->next->str), tmp->token);
 	if (!node)
-		parser_error(1, parser_shell->shell, parser_shell->lexer_list);
+		parser_error(1, parser_shell->lexer_list);
 	if (tmp->token == HEREDOC)
 	{
 		//to do クォートありかなしか
 		expand = (tmp->next->token == WORD);
 		node->heredoc_fd = read_heredoc(tmp->next->str, expand, parser_shell->shell->env, parser_shell->shell->error_num);
 		//エラーハンドリング
-		if (node->heredoc_fd == -1 && g_signal == 1)
+		if (node->heredoc_fd == -1)//&& g_signal == 1
 		{
 			//free(node)etc,,,
+			free(node->str);
+			free(node);
 			return(EXIT_FAILURE);//呼び出し元で中断処理
 		}
 	}
@@ -61,11 +63,10 @@ int	remove_redirections(t_parser_shell *parser_shell)
 		return (EXIT_SUCCESS);
 	// エラー：ファイル名がない
 	if (!tmp->next || tmp->next->token == END_OF_INPUT)
-		parser_error(0, parser_shell->shell, parser_shell->lexer_list);
+		parser_error(0, parser_shell->lexer_list);
 	// エラー：リダイレクト連続
 	if (tmp->next->token >= PIPE && tmp->next->token <= HEREDOC)
-		parser_double_token_error(parser_shell->shell, parser_shell->lexer_list,
-			tmp->next->token);
+		parser_double_token_error(parser_shell->lexer_list, tmp->next->token);
 	// リダイレクトがあったらリダイレクションリストに追加し、リダイレクトとその後の文字列をlexerから削除
 	if (tmp->token >= REDIR_OUT && tmp->token <= HEREDOC)
 	{
