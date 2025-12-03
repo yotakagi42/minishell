@@ -6,23 +6,16 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:20:47 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 02:52:34 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:13:33 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	heredoc_sigint_handler(int sig)
+static int	get_var_len(char *str)
 {
-	(void)sig;
-	g_signal = 1;
-	write(1, "\n", 1);
-}
+	int	i;
 
-static int get_var_len(char *str)
-{
-	int i;
-	
 	i = 0;
 	if (!str)
 		return (0);
@@ -31,20 +24,22 @@ static int get_var_len(char *str)
 	return (i);
 }
 
-static size_t calc_heredoc_len(char *str, char **env, int status)
+static size_t	calc_heredoc_len(char *str, char **env, int status)
 {
 	size_t	len;
 	int		i;
 	char	*key;
 	char	*val;
+	char	*num;
+	int		v_len;
 
 	len = 0;
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] == '?')
 		{
-			char	*num = ft_itoa(status);
+			num = ft_itoa(status);
 			if (num)
 				len += ft_strlen(num);
 			free(num);
@@ -53,8 +48,8 @@ static size_t calc_heredoc_len(char *str, char **env, int status)
 		else if (str[i] == '$' && (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
 		{
 			i++;
-			int	v_len = get_var_len(&str[i]);
-			key	= ft_substr(str, i, v_len);
+			v_len = get_var_len(&str[i]);
+			key = ft_substr(str, i, v_len);
 			val = get_env_value(env, key);
 			if (val)
 				len += ft_strlen(val);
@@ -79,6 +74,10 @@ static char	*expand_heredoc_line(char *line, char **env, int status)
 	size_t	len;
 	size_t	i;
 	size_t	j;
+	char	*num;
+	int		v_len;
+	char	*key;
+	char	*val;
 
 	len = calc_heredoc_len(line, env, status);
 	new_line = (char *)malloc(sizeof(char) * (len + 1));
@@ -88,9 +87,9 @@ static char	*expand_heredoc_line(char *line, char **env, int status)
 	j = 0;
 	while (line[i])
 	{
-		if(line[i] == '$' && line[i + 1] == '?')
+		if (line[i] == '$' && line[i + 1] == '?')
 		{
-			char *num = ft_itoa(status);
+			num = ft_itoa(status);
 			if (num)
 			{
 				ft_strlcpy(&new_line[j], num, ft_strlen(num) + 1);
@@ -99,13 +98,14 @@ static char	*expand_heredoc_line(char *line, char **env, int status)
 			}
 			i += 2;
 		}
-		else if (line[i] == '$' && (ft_isalpha(line[i + 1]) || line[i + 1] == '_'))
+		else if (line[i] == '$' && (ft_isalpha(line[i + 1]) || line[i
+				+ 1] == '_'))
 		{
 			i++;
-			int v_len = get_var_len(&line[i]);
-			char *key = ft_substr(line, i, v_len);
-			char *val = get_env_value(env, key);
-			if(val)
+			v_len = get_var_len(&line[i]);
+			key = ft_substr(line, i, v_len);
+			val = get_env_value(env, key);
+			if (val)
 			{
 				ft_strlcpy(&new_line[j], val, ft_strlen(val) + 1);
 				j += ft_strlen(val);
@@ -134,16 +134,15 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 {
 	char	*line;
 	int		pipe_fd[2];
+	char	*expanded;
 
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("minishell: pipe");
 		return (-1);
 	}
-
 	signal(SIGINT, heredoc_sigint_handler);
 	rl_event_hook = heredoc_signal_check;
-
 	while (1)
 	{
 		line = readline("> ");
@@ -154,15 +153,16 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 			close(pipe_fd[0]);
 			// パイプなどを閉じて、エラーコードを返す特別な処理が必要
 			// 呼び出し元で「実行をキャンセル」する判断ができるようにする
-			//Parser側で read_heredoc がシグナル中断（-1など）を返した場合
+			// Parser側で read_heredoc がシグナル中断（-1など）を返した場合
 			//その後のコマンド実行やParser処理をすべて中止して、メインループに戻る実装
 			// g_signal = 0;
-			return(-1);
+			return (-1);
 		}
 		if (!line)
 		{
-			//ToDo メッセージの修正
-			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", 2);
+			// ToDo メッセージの修正
+			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n",
+				2);
 			break ;
 		}
 		if (ft_strcmp(line, delimiter) == 0)
@@ -172,7 +172,7 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 		}
 		if (expand)
 		{
-			char *expanded = expand_heredoc_line(line, env, status);
+			expanded = expand_heredoc_line(line, env, status);
 			free(line);
 			line = expanded;
 		}

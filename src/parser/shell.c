@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:43:06 by nhara             #+#    #+#             */
-/*   Updated: 2025/12/03 13:23:06 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:32:46 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ void	init_shell(t_shell *shell)
 	shell->reset = false;
 	shell->pid = NULL;
 	shell->heredoc = false;
-	// shell->error_num = 0;
-	// shell->stop_heredoc = 0;
-	// shell->in_cmd = 0;
-	// shell->in_heredoc = 0;
+	shell->error_num = 0;
 	if (init_paths_from_env(shell) == EXIT_FAILURE)
 	{
 		printf("msg"); //エラーメッセージどうする？
@@ -66,7 +63,6 @@ int	reset_shell(t_shell *shell)
 	shell->cmd = NULL;
 	shell->args = NULL;
 	shell->lexer_list = NULL;
-	shell->reset = false;
 	shell->pid = NULL;
 	shell->heredoc = false;
 	// 初期化するようにフラグを立てる
@@ -79,9 +75,6 @@ int	loop(t_shell *shell)
 	char	*tmp;
 
 	shell->args = readline("minishell> ");
-	tmp = ft_strtrim(shell->args, " \t"); //タブ文字も除去する変更
-	free(shell->args);
-	shell->args = tmp;
 	if (g_signal)
 	{
 		shell->error_num = 130;
@@ -96,7 +89,7 @@ int	loop(t_shell *shell)
 		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-	tmp = ft_strtrim(shell->args, " \t"); //タブ文字も除去する変更
+	tmp = ft_strtrim(shell->args, " \t");
 	free(shell->args);
 	shell->args = tmp;
 	if (shell->args[0] == '\0')
