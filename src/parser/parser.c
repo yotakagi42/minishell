@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 19:01:20 by nagisa            #+#    #+#             */
 /*   Updated: 2025/12/03 12:53:42 by yotakagi         ###   ########.fr       */
+=======
+/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/18 19:01:20 by nagisa            #+#    #+#             */
+/*   Updated: 2025/12/03 02:38:58 by ayamamot         ###   ########.fr       */
+>>>>>>> 84c84ff03769db3e3c1e29b83a42a80bdbb1deab
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +29,12 @@ int	parser(t_shell *shell) // TODO
 	count_pipes(shell->lexer_list, shell);
 	// エラー：最初にパイプ
 	if (shell->lexer_list->token == PIPE)
+<<<<<<< HEAD
 		return (parser_double_token_error(shell, shell->lexer_list,
 				shell->lexer_list->token));
+=======
+		return (parser_double_token_error(shell->lexer_list, shell->lexer_list->token));
+>>>>>>> 84c84ff03769db3e3c1e29b83a42a80bdbb1deab
 	// lexerの最後まで繰り返す
 	while (shell->lexer_list && shell->lexer_list->token != END_OF_INPUT)
 	{
@@ -37,8 +48,17 @@ int	parser(t_shell *shell) // TODO
 		parser_shell = init_parser_shell(shell->lexer_list, shell);
 		// 新しいコマンドを構築
 		node = init_cmd(&parser_shell);
-		if (!node) // TODO　これは何のエラー？
-			parser_error(0, shell, parser_shell.lexer_list);
+		if (!node)
+		{
+			if(g_signal)
+			{
+				//free_lexer?
+				shell->error_num = 1;
+				return (EXIT_FAILURE);
+			}
+			parser_error(0, parser_shell.lexer_list);
+			return (EXIT_FAILURE);
+		}
 		// 構築したコマンドを、コマンドリストに追加
 		// コマンドリストが空の場合、先頭に入れる
 		if (!shell->cmd)
