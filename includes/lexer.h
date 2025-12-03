@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:12:44 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 13:59:02 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:11:08 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_lexer
 	int	join_next;
 	struct s_lexer *next; // 次のトークン（→）
 	struct s_lexer *prev; // 前のトークン (←)
-	int	join_next;
 }		t_lexer;
 
 t_lexer	*lexer(const char *input);
