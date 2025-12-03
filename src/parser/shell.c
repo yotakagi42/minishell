@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:43:06 by nhara             #+#    #+#             */
-/*   Updated: 2025/12/03 02:30:15 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:50:50 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,27 @@ int	loop(t_shell *shell)
 	char	*tmp;
 
 	shell->args = readline("minishell> ");
-	tmp = ft_strtrim(shell->args, " \t");//タブ文字も除去する変更
-	free(shell->args);
-	shell->args = tmp;
+
+	if (g_signal)
+	{
+		shell->error_num = 130;
+		g_signal = 0;
+		if (!shell->args)
+		{
+			return (shell->error_num);
+		}
+	}
+	
 	if (!shell->args)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
+
+	tmp = ft_strtrim(shell->args, " \t");//タブ文字も除去する変更
+	free(shell->args);
+	shell->args = tmp;
+
 	if (shell->args[0] == '\0')
 		return (shell->error_num);
 	add_history(shell->args);

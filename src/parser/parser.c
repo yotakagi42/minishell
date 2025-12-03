@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 19:01:20 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/03 02:33:16 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:38:58 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int parser(t_shell *shell) // TODO
 				return (EXIT_FAILURE);
 			}
 			parser_error(0, parser_shell.lexer_list);
+			return (EXIT_FAILURE);
 		}
 		// 構築したコマンドを、コマンドリストに追加
 		// コマンドリストが空の場合、先頭に入れる

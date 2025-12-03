@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:20:47 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 02:16:56 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/03 02:52:34 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 			// 呼び出し元で「実行をキャンセル」する判断ができるようにする
 			//Parser側で read_heredoc がシグナル中断（-1など）を返した場合
 			//その後のコマンド実行やParser処理をすべて中止して、メインループに戻る実装
-			g_signal = 0;
+			// g_signal = 0;
 			return(-1);
 		}
 		if (!line)
