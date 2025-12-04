@@ -6,18 +6,11 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 10:49:17 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 10:49:19 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:05:07 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	unset_error(const char *key)
-{
-	ft_putstr_fd("minishell: unset: `", 2);
-	ft_putstr_fd((char *)key, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-}
 
 static int	is_remove_target(char *env_str, const char *key, size_t key_len)
 {
@@ -74,13 +67,7 @@ int	minishell_unset(t_shell *shell, t_cmd *cmd)
 	while (cmd->str[i])
 	{
 		key = cmd->str[i];
-		if (!is_valid_key(key))
-		{
-			unset_error(key);
-			shell->error_num = 1;
-		}
-		else
-			remove_env_entry(&shell->env, key);
+		remove_env_entry(&shell->env, key);
 		i++;
 	}
 	return (0);

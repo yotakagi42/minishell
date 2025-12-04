@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 11:02:15 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/04 15:27:42 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:12:28 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_overflow(const char *str)
 			sign = -1;
 		str++;
 	}
-	while (*str)
+	while (*str && ft_isdigit(*str))
 	{
 		if (sign == 1 && (res > LONG_MAX / 10 || (res == LONG_MAX / 10 && (*str
 						- '0') > LONG_MAX % 10)))
@@ -46,17 +46,19 @@ int	is_numeric(const char *str)
 	int	i;
 
 	i = 0;
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	if (!str[i])
+	if (!ft_isdigit(str[i]))
 		return (0);
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
+	while (str[i] && ft_isdigit(str[i]))
 		i++;
-	}
-	return (1);
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	if (str[i] == '\0')
+		return (1);
+	return (0);
 }
 
 void	clean_exit(t_shell *shell, int exit_code)
