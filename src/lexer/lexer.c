@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:47:44 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/04 13:23:22 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:31:20 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ t_lexer	*new_token(char *str, t_tokens type)
 		tok->str = NULL;
 	tok->token = type;
 	tok->i = 0;
+	tok->join_next = 0;
+	tok->heredoc_fd = -1;
 	tok->next = NULL;
 	tok->prev = NULL;
 	return (tok);

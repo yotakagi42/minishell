@@ -40,5 +40,7 @@ t_builtin_fn	builtin_arr(char *str);
 void			update_or_add_env(t_shell *shell, char *key, char *val);
 int				find_env_entry(char **env, char *key);
 char			*my_getenv(char **env, char *key);
+void			clean_exit(t_shell *shell, int exit_code);
+int				is_overflow(const char *str);
 
 #endif

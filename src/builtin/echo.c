@@ -6,11 +6,29 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 11:39:36 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 15:48:39 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:58:16 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	is_n_flag(const char *str)
+{
+	int	i;
+
+	i = 1;
+	if (!str || str[0] != '-')
+		return (0);
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	minishell_echo(t_shell *shell, t_cmd *cmd)
 {
@@ -20,7 +38,7 @@ int	minishell_echo(t_shell *shell, t_cmd *cmd)
 	i = 1;
 	nl = 1;
 	(void)shell;
-	while (cmd->str[i] && !ft_strcmp(cmd->str[i], "-n"))
+	while (cmd->str[i] && is_n_flag(cmd->str[i]))
 	{
 		nl = 0;
 		i++;

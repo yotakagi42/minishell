@@ -12,6 +12,56 @@
 
 #include "minishell.h"
 
+static int	is_joinable(t_tokens token)
+{
+	return (token == WORD || token == DQUOTE_WORD || token == SQUOTE_WORD
+		|| token == ENV_VAR || token == EXIT_STATUS);
+}
+
+static void	unite_tokens(t_lexer **lexer_list)
+{
+	t_lexer	*tmp;
+	t_lexer	*next;
+	char	*joined;
+
+	if (!lexer_list || !*lexer_list)
+		return ;
+	tmp = *lexer_list;
+	while (tmp)
+	{
+		// 結合条件:
+		// 1. フラグが立っている
+		// 2. 次がある
+		// 3. 現在のトークンがWORD系である (重要: >file のように結合するのを防ぐ)
+		// 4. 次のトークンがパイプや終端ではない
+		while (tmp->join_next && tmp->next && is_joinable(tmp->token)
+			&& tmp->next->token != PIPE && tmp->next->token != END_OF_INPUT)
+		{
+			next = tmp->next;
+			// 安全策
+			if (!tmp->str || !next->str)
+				break ;
+			joined = ft_strjoin(tmp->str, next->str);
+			if (!joined)
+				return ; // エラー処理
+			free(tmp->str);
+			tmp->str = joined;
+			tmp->join_next = next->join_next; // フラグ継承
+			// クォート状態の更新
+			if (next->token == DQUOTE_WORD || next->token == SQUOTE_WORD)
+				tmp->token = DQUOTE_WORD;
+			// ノード削除処理 (手動で安全に行う)
+			tmp->next = next->next;
+			if (next->next)
+				next->next->prev = tmp;
+			if (next->str)
+				free(next->str);
+			free(next);
+		}
+		tmp = tmp->next;
+	}
+}
+
 void	close_heredocs(t_lexer *redirections)
 {
 	while (redirections)
@@ -28,24 +78,24 @@ void	close_heredocs(t_lexer *redirections)
 // コマンドリスト（t_cmd）の解放
 void	free_cmd(t_cmd **lst)
 {
-	t_lexer	*redirection_tmp;
-
-	// t_cmd *tmp;
-	if (!*lst) // リストがNULLの場合
+	t_cmd	*tmp;
+	t_cmd	*crnt;
+	if (!lst || !*lst)
 		return ;
-	// while (*lst)
-	// 	tmp = (*lst)->next;
-	redirection_tmp = (*lst)->redirections;
-	close_heredocs(redirection_tmp);
-	free_lexer(&redirection_tmp);
-	if ((*lst)->str)
-		free_arr((*lst)->str);
-	// if ((*lst)->hd_file_name) // TODO
-	// {
-	// 	free((*lst)->hd_file_name);
-	// 	free(*lst); // 構造体全体を解放
-	// 	*lst = tmp; // 次の構造体へ
-	// }
+	crnt = *lst;
+	while(crnt)
+	{
+		tmp = crnt->next;
+		if (crnt->redirections)
+		{
+			close_heredocs(crnt->redirections);
+			free_lexer(&crnt->redirections);
+		}
+		if (crnt->str)
+			free_arr(crnt->str);
+		free(crnt);
+		crnt = tmp;
+	}
 	*lst = NULL;
 }
 
@@ -113,16 +163,16 @@ t_cmd	*init_cmd(t_parser_shell *parser_shell)
 	char	**str;
 	int		current_index;
 
-	char *temp; // 結合用の一時変数
-	i = 0;
+	unite_tokens(&parser_shell->lexer_list);
 	if (remove_redirections(parser_shell) == EXIT_FAILURE)
 		return (NULL);
 	// ★修正したcount_argsを使用
 	arg_size = count_args(parser_shell->lexer_list);
 	str = ft_calloc(arg_size + 1, sizeof(char *));
 	if (!str)
-		parser_error(1, parser_shell->lexer_list);
+		ft_error(1);
 	tmp = parser_shell->lexer_list;
+	i = 0;
 	while (arg_size > 0)
 	{
 		if (tmp && tmp->str)
@@ -133,18 +183,6 @@ t_cmd	*init_cmd(t_parser_shell *parser_shell)
 			current_index = tmp->i;
 			// ★追加: 結合ループ
 			// join_nextが立っていて、次が存在するなら結合し続ける
-			while (tmp->join_next && tmp->next)
-			{
-				tmp = tmp->next; // 次へ進む
-				// 文字列を結合 (str[i] + tmp->str)
-				temp = ft_strjoin(str[i], tmp->str);
-				free(str[i]); // 古い方を解放
-				str[i] = temp;
-				// 吸収された「次のノード」を削除リストから消す
-				// (remove_nodeの実装によっては副作用に注意が必要ですが、
-				//  まずはリストから論理的に消せればOK)
-				remove_node(&parser_shell->lexer_list, tmp->i);
-			}
 			// 結合が終わった後、最初の「親玉ノード」を削除
 			remove_node(&parser_shell->lexer_list, current_index);
 			i++;

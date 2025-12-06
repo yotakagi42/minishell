@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:20:47 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 15:33:16 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:08:38 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ static size_t	calc_heredoc_len(char *str, char **env, int status)
 	return (len);
 }
 
-// ヒアドキュメント用の変数展開関数
-// (クォートの処理はせず、$VAR だけを展開する簡易版)
 static char	*expand_heredoc_line(char *line, char **env, int status)
 {
 	char	*new_line;
@@ -122,11 +120,11 @@ static char	*expand_heredoc_line(char *line, char **env, int status)
 	new_line[j] = '\0';
 	return (new_line);
 }
-// イベントフック用（Ctrl-C検知）
+
 int	heredoc_signal_check(void)
 {
 	if (g_signal)
-		rl_done = 1; // readlineを強制終了させる
+		rl_done = 1;
 	return (0);
 }
 
@@ -152,16 +150,10 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 			close(pipe_fd[1]);
 			close(pipe_fd[0]);
 			rl_event_hook = NULL;
-			// パイプなどを閉じて、エラーコードを返す特別な処理が必要
-			// 呼び出し元で「実行をキャンセル」する判断ができるようにする
-			// Parser側で read_heredoc がシグナル中断（-1など）を返した場合
-			//その後のコマンド実行やParser処理をすべて中止して、メインループに戻る実装
-			// g_signal = 0;
 			return (-1);
 		}
 		if (!line)
 		{
-			// ToDo メッセージの修正
 			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n",
 				2);
 			break ;

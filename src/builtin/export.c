@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 10:50:10 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 12:08:55 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:26:55 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,11 @@ void	process_export_no_value(t_shell *shell, char *arg)
 
 	key = ft_strdup(arg);
 	if (!is_valid_key(key))
+	{
 		export_error(arg);
+		free(key);
+		return ;
+	}
 	if (find_env_entry(shell->env, key))
 	{
 		free(key);
