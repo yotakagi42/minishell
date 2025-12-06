@@ -87,6 +87,7 @@ t_cmd	*init_cmd(t_parser_shell *parser_shell)
 			str[i++] = ft_strdup(parser_shell->lexer_list->str);
 			remove_node(&parser_shell->lexer_list, parser_shell->lexer_list->i);
 		}
+		arg_size--;
 	}
 	return (create_cmd(str, parser_shell->num_redirections,
 			parser_shell->redirections));
