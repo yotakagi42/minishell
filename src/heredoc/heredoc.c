@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 14:20:47 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/03 15:33:16 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:40:10 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ static char	*expand_heredoc_line(char *line, char **env, int status)
 int	heredoc_signal_check(void)
 {
 	if (g_signal)
-		rl_done = 1; // readlineを強制終了させる
+		rl_done = 1;
 	return (0);
 }
 
@@ -152,16 +152,10 @@ int	read_heredoc(const char *delimiter, bool expand, char **env, int status)
 			close(pipe_fd[1]);
 			close(pipe_fd[0]);
 			rl_event_hook = NULL;
-			// パイプなどを閉じて、エラーコードを返す特別な処理が必要
-			// 呼び出し元で「実行をキャンセル」する判断ができるようにする
-			// Parser側で read_heredoc がシグナル中断（-1など）を返した場合
-			//その後のコマンド実行やParser処理をすべて中止して、メインループに戻る実装
-			// g_signal = 0;
 			return (-1);
 		}
 		if (!line)
 		{
-			// ToDo メッセージの修正
 			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n",
 				2);
 			break ;
