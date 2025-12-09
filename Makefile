@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yotakagi <yotakagi@student.42tokyo.jp>     +#+  +:+       +#+         #
+#    By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/18 19:40:36 by nagisa            #+#    #+#              #
-#    Updated: 2025/12/08 13:56:31 by yotakagi         ###   ########.fr        #
+#    Updated: 2025/12/09 17:47:25 by yotakagi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS = \
 	src/expander/expand_token.c \
 	src/expander/expander_utils.c \
 	src/expander/expander_len.c \
+	src/executor/executor.c \
 	src/executor/exec_cmd.c \
 	src/executor/single_cmd.c \
 	src/executor/multiple_cmds.c \
@@ -77,10 +78,12 @@ $(LIBFT_A):
 	$(MAKE) -C $(LIBFT_DIR)
 
 clean:
+	$(MAKE) -C $(LIBFT_DIR) clean
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
