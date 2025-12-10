@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:43:06 by nhara             #+#    #+#             */
-/*   Updated: 2025/12/10 13:38:38 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:51:54 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	init_shell(t_shell *shell)
 	shell->pid = NULL;
 	shell->heredoc = false;
 	shell->error_num = 0;
+	shell->exit_loop = false;
 	if (init_paths_from_env(shell) == EXIT_FAILURE)
 		exit(EXIT_FAILURE);
 	init_signals();

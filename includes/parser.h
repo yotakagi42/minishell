@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 18:56:10 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/10 13:35:32 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:50:40 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_shell
 	bool			reset;
 	bool			heredoc;
 	int				error_num;
+	bool			exit_loop;
 }					t_shell;
 
 typedef struct s_cmd
