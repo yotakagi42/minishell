@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:33:42 by ayamamot          #+#    #+#             */
-/*   Updated: 2025/12/09 14:43:13 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/10 02:21:27 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
 	g_signal = 1;
-
 	rl_on_new_line();
 	rl_replace_line("", 0);
 }

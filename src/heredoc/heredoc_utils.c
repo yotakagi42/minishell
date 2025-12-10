@@ -6,7 +6,7 @@
 /*   By: ayamamot <ayamamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 04:57:48 by ayamamot          #+#    #+#             */
-/*   Updated: 2025/12/09 14:43:15 by ayamamot         ###   ########.fr       */
+/*   Updated: 2025/12/10 02:21:54 by ayamamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	abort_heredoc(char *line, int pipe_fd[2])
 	close(pipe_fd[0]);
 	rl_event_hook = NULL;
 	init_signals();
-	g_signal = 0;//todo
+	g_signal = 0;
 	return (-1);
 }
 
