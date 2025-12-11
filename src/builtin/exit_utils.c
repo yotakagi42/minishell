@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 11:02:15 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/10 13:35:48 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:09:56 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,6 @@ int	is_numeric(const char *str)
 	if (str[i] == '\0')
 		return (1);
 	return (0);
-}
-
-void	clean_exit(t_shell *shell, int exit_code)
-{
-	if (shell->env)
-		free_arr(shell->env);
-	if (shell->paths)
-		free_arr(shell->paths);
-	if (shell->args)
-		free(shell->args);
-	if (shell->cmd)
-		free_cmd(&shell->cmd);
-	if (shell->pid)
-		free(shell->pid);
-	exit(exit_code);
 }
 
 void	exit_numeric_error(const char *arg)

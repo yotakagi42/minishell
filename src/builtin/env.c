@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 05:27:29 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/12/10 13:35:46 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:47:20 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ int	minishell_env(t_shell *shell, t_cmd *cmd)
 {
 	int	i;
 
-	(void)cmd;
+	if (cmd->str[1])
+	{
+		ft_putstr_fd("minishell: env: too many arguments\n", 2);
+		return (1);
+	}
 	i = 0;
 	while (shell->env && shell->env[i])
 	{

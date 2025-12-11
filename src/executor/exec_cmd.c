@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:57:24 by nagisa            #+#    #+#             */
-/*   Updated: 2025/12/10 13:36:41 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:30:42 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	find_cmd(t_cmd *cmd, t_shell *shell)
 	char	*cmd_path;
 
 	if (!shell->paths)
-		exit_with_perror(cmd->str[0], "command not found", 127);
+	{
+		execve(cmd->str[0], cmd->str, shell->env);
+		exit_with_perror(cmd->str[0], "No such file or directory", 127);
+	}
 	i = 0;
 	while (shell->paths[i])
 	{
