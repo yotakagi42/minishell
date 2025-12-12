@@ -46,11 +46,11 @@ cd minishell
 make
 
 実行方法
+起動するとプロンプトが表示されます。通常のシェルと同様にコマンドを入力してください。
+
 Bash
 
 ./minishell
-起動するとプロンプトが表示されます。通常のシェルと同様にコマンドを入力してください。
-
 開発者 (Authors)
 [yotakagi] - Lexer, Builtin, Expander
 
